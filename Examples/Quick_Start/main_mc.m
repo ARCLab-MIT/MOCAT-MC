@@ -18,7 +18,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [nS,nD,nN,nB]=main_mc(MCconfig,RNGseed)
+function [nS,nD,nN,nB,mat_sats]=main_mc(MCconfig,RNGseed)
     % MCconfig is a structure of all relevant variables from a config setup file
     % usually in 'configFiles' folder
     % OR a string of the config name, e.g. 'setupSomma'
@@ -472,12 +472,6 @@ function [nS,nD,nN,nB]=main_mc(MCconfig,RNGseed)
             sats_info{n,3} = int8(controlled_store);
         end
 
-        
-
-%         sats_file.sats_info(n,1) = int8(objclassint_store);
-%         sats_file.sats_info(n,2) = single(a_store);
-%         sats_file.sats_info(n,3) = int8(controlled_store);
-
         if ~isempty(collision_array) && save_output_file == 3
             frag_info5{n} = uint16(frag5tmp);
             
@@ -507,10 +501,6 @@ function [nS,nD,nN,nB]=main_mc(MCconfig,RNGseed)
             year(current_time), day(current_time,'dayofyear'), num_pmd ,num_deorbited, ...
             size(out_future,1) * launch, count_expl(n), ...
             count_coll(n), numObjects(n,1), nS, nD, nN, nB);
-    %ANIMATION
-%         if strcmpi(animation,'yes')
-%             [ind_fig,p,p_earth,hAnnotation] = plot_fig(mat_sats(:,idx_r),tsince,n,omega_earth,ind_fig,p,p_earth,hAnnotation);
-%         end   
     
     % CHECK MEMORY CONSUMPTION
         sat_bytes = whos('sats_info').bytes;
@@ -518,103 +508,10 @@ function [nS,nD,nN,nB]=main_mc(MCconfig,RNGseed)
         frag_info5_bytes = whos('frag_info5').bytes;
         total_bytes = sat_bytes+frag_info_bytes+frag_info5_bytes;
 
-    % SAVE OUTPUT 
-        if save_output_file > 0 && ( (mod(n,n_save_checkpoint) == 1 || n==n_time || numObjects(n,1) > numObjTrigger || total_bytes/(1e+9) > 30) )
-            if total_bytes/(1e+9) > 30
-                warning('Total file size exceeded 30GB. Total file size is %s GB.',total_bytes/(1e+9));
-            end
-
-            if numObjects(n,1) > numObjTrigger
-                numObjTrigger = numObjTrigger + 5e5;  % increase limit
-            end
-            
-            % Increment file save index by 1
-            file_save_index = file_save_index +1;
-
-            switch save_output_file
-                case 1  % save entire workspace
-                    savevars = {'*'}; 
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 2  % save sats_info, config, params
-                    savevars = {'sats_info','MCconfig','param','paramSSEM'};
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 3  % save summary (S_MC, N_MC, D_MC, etc)
-                    savevars = {'S_MC','D_MC','N_MC','MCconfig','param','paramSSEM','frag_info5'};
-%                     % preallocate
-%                     S_MC = nan(n_time,numel(paramSSEM.R02)-1); D_MC = S_MC;  N_MC = S_MC;
-%                     for tind = 1:n
-%                         [popSSEM] = Fast_MC2SSEM_population(sats_info(tind,:),paramSSEM);
-%                         S_MC(tind,:) = popSSEM(:,1);
-%                         D_MC(tind,:) = popSSEM(:,2);
-%                         N_MC(tind,:) = popSSEM(:,3);
-%                     end
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 4  % save summary and collision stats
-                    savevars = {'S_MC','D_MC','N_MC','MCconfig','param','paramSSEM','frag_info','frag_info5'};
-%                     S_MC = nan(n_time,numel(paramSSEM.R02)-1); D_MC = S_MC;  N_MC = S_MC;
-%                     for tind = 1:n
-%                         [popSSEM] = Fast_MC2SSEM_population(sats_info(tind,:),paramSSEM);
-%                         S_MC(tind,:) = popSSEM(:,1);
-%                         D_MC(tind,:) = popSSEM(:,2);
-%                         N_MC(tind,:) = popSSEM(:,3);
-%                     end
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 5  % save just collision stats
-                    savevars = {'MCconfig','param','paramSSEM','frag_info','frag_info5'};
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 6  % Tracking mean/var/median of physical parameters
-                    savevars = {'S_MC','D_MC','N_MC','MCconfig','param','paramSSEM','param_mean','param_var','param_median'};
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 7  % Collision tracking (UROP)        
-                    frag_info7 = cell(n_time,2); % just 2 columns needed
-                    frag_info7(:,1) = frag_info(:,1);  % 1st col
-                    frag_info7(:,2) = frag_info(:,4);  % 4th col
-                    savevars = {'frag_info7'};
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                    clear frag_info7;
-                case 10 % save all, decimate matsats
-                    savevars = {'MCconfig','param','paramSSEM','matsatsperN'};
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                case 11 % save all, decimate matsats
-                    savevars = {'MCconfig','param','paramSSEM','mat_sats','nS','nD','nN','nB'};
-                    MCconfig.mat_sats = [];  % to save space
-                    save([filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat'],'-v7.3',savevars{:});
-                otherwise
-                    fprintf('save_output_file flag set to unsupported value: %i\n', save_output_file);
-            end
-    
-            if save_output_file==3||save_output_file==4
-                sats_info = cell(1,3);
-            else
-                sats_info = cell(n_time,3);         % contains info for SSEM binning
-            end
-            frag_info = cell(n_time,4);         % contains info on cube statistics
-            frag_info5 = cell(n_time,1);        % contains simplified info on cube statistics
-            fprintf('Variables cleared and %s saved', [filename_save(1:end-4),'_part_',num2str(file_save_index),'.mat']);
-        end
+        frag_info = cell(n_time,4);         % contains info on cube statistics
+        frag_info5 = cell(n_time,1);        % contains simplified info on cube statistics
+        
     end
-    % figure
-    % plot(tsince/DAY2MIN/YEAR2DAY,sum(D_MC,2))
-    % title('D')
-    % figure
-    % plot(tsince/DAY2MIN/YEAR2DAY,sum(S_MC,2))
-    % title('S')
-    % figure
-    % plot(tsince/DAY2MIN/YEAR2DAY,sum(N_MC,2))
-    % title('N')
-    % figure
-    % plot(tsince/DAY2MIN/YEAR2DAY,sum(D_MC,2)+sum(S_MC,2)+sum(N_MC,2))
-    % title('T')
-    % 
-    % figure
-    % plot(tsince/DAY2MIN/YEAR2DAY,D_MC)
-    % title('D per shell')
     
     fprintf('\n === FINISHED MC RUN (main_mc.m) WITH SEED: %i === \n',RNGseed);
 

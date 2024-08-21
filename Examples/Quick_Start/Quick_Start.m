@@ -19,9 +19,9 @@ fprintf('Seed %i\n', seed);
 fprintf('Initial Population:  %i sats\n', size(cfgMC.mat_sats,1));
 fprintf('Launches per year: %i\n', size(cfgMC.repeatLaunches,1));
 disp('Starting main_mc...');
-[nS,nD,nN,nB]=main_mc(cfgMC,seed);
+[nS,nD,nN,nB,mat_sats]=main_mc(cfgMC,seed);
 
-% MOCAT MC postprocess: ratio of satellite in all space objects
+% MOCAT MC postprocess: ratio of satellite (SR) among all space objects
 ratio = nS/(nS+nD+nN+nB);
 fprintf('Quick Start under no launch scenario done!\n')
 fprintf('Satellite ratio in all space objects after evolution: %f\n', ratio)
