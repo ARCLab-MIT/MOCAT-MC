@@ -52,3 +52,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+## Citation
+
+    @article{Jang2024Monte,
+      title={A New Monte-Carlo Model for the Space Environment}, 
+      author={Daniel Jang and Davide Gusmini and Peng Mun Siew and Andrea D'Ambrosio and Simone Servadio and Pablo Machuca and Richard Linares},
+      year={2024},
+      eprint={2405.10430},
+      archivePrefix={arXiv},
+      primaryClass={astro-ph.EP},
+      url={https://arxiv.org/abs/2405.10430}, 
+    }
+
