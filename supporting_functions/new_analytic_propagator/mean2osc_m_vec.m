@@ -24,7 +24,7 @@ for l=1:1000
     e_check = e(check_mag);
     DeltaEpw = - (Mo(check_mag) - Epw_check + e_check.*sin(Epw_check))./(-1+e_check.*cos(Epw_check));
     Epw(check_mag) = Epw_check+DeltaEpw;
-    check_mag = check_mag(DeltaEpw > 10e-14);
+    check_mag = check_mag(abs(DeltaEpw) > 10e-14);
     if isempty(check_mag) %if all elements have gone below threshold
         break
     end
