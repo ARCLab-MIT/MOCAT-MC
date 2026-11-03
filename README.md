@@ -6,6 +6,14 @@ MIT ARCLab's Monte-Carlo Tool for long-term propagation of the LEO environment
 ## Required modules
 MOCAT-MC is developed in MATLAB.
 
+- Statistics and Machine Learning Toolbox: `fillMassRadiusResample.m` uses `fitgmdist`
+  and `gmdistribution`, and `getZeroGroups.m` uses `isoutlier`. Without the toolbox,
+  `Quick_Start` stops during `initSim`.
+- The `kepler1_C` mex is provided for Windows and x86-64 macOS/Linux only. On other
+  platforms (for example Apple silicon), set `if n_sats<0` in
+  `supporting_functions/new_analytic_propagator/mean2osc_vec.m` so that the MATLAB
+  fallback `kepler1_vec` is used.
+
 ## Examples
 For a _Quick_Start_, run:
 

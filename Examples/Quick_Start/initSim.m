@@ -130,10 +130,10 @@ function cfgMCout = initSim(cfg, Simulation, launch_model, ICfile)
     % add in desired_a
         mat_sats(mat_sats(:,idx_controlled)==1, idx_a_desired) = mat_sats(mat_sats(:,idx_controlled)==1,idx_a);
         if ~isempty(repeatLaunches) % only when repeatLaunches is not empty
-        repeatLaunches(repeatLaunches(:,idx_controlled)==1, idx_missionlife) = repeatLaunches(repeatLaunches(:,idx_controlled)==1,idx_a);
+        repeatLaunches(repeatLaunches(:,idx_controlled)==1, idx_a_desired) = repeatLaunches(repeatLaunches(:,idx_controlled)==1,idx_a);
         end
         if ~isempty(additional_launches)
-        additional_launches(additional_launches(:,idx_controlled)==1, idx_missionlife) = additional_launches(additional_launches(:,idx_controlled)==1,idx_a);
+        additional_launches(additional_launches(:,idx_controlled)==1, idx_a_desired) = additional_launches(additional_launches(:,idx_controlled)==1,idx_a);
         end
 
     % recalculate Bstar  

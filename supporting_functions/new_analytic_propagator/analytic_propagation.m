@@ -28,7 +28,7 @@ if strcmpi(param.density_profile,'JB2008')
     end
 
 elseif strcmpi(param.density_profile,'static')
-    rho_0 = densityexp(input_oe(1,1)-re)*(1000)^3;
+    rho_0 = densityexp_vec(input_oe(1,1)-re)*(1000)^3;
 end
 %constants
 %C_0=param.C_0*rho_0;%1/2*Cd*s_ref/m*rho_0

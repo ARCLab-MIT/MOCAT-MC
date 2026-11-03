@@ -187,7 +187,7 @@ for fileind = 16:numel(csvs)
     ns = nan(numel(satIDs),1);
     
     matsatsout = [mattles.SEMIMAJOR_AXIS/radiusearthkm, mattles.ECCENTRICITY,  ... % col 1:2
-                    deg2rad(mattles.INCLINATION), deg2rad(mattles.MEAN_ANOMALY), ... % col 3:4
+                    deg2rad(mattles.INCLINATION), deg2rad(mattles.RA_OF_ASC_NODE), ... % col 3:4
                     deg2rad(mattles.ARG_OF_PERICENTER), deg2rad(mattles.MEAN_ANOMALY), ... % col 5:6
                     mattles.BSTAR, dmass, dradius, ...                      % col 7:9
                     zs, zs, zs, zs, zs, ns, ...                             % col 10:15
@@ -580,7 +580,7 @@ zs = zeros(numel(satIDs),1);
 ns = nan(numel(satIDs),1);
 
 matsatsout = [mattles.SEMIMAJOR_AXIS/radiusearthkm, mattles.ECCENTRICITY,  ... % col 1:2
-                deg2rad(mattles.INCLINATION), deg2rad(mattles.MEAN_ANOMALY), ... % col 3:4
+                deg2rad(mattles.INCLINATION), deg2rad(mattles.RA_OF_ASC_NODE), ... % col 3:4
                 deg2rad(mattles.ARG_OF_PERICENTER), deg2rad(mattles.MEAN_ANOMALY), ... % col 5:6
                 mattles.BSTAR, dmass, dradius, ...                      % col 7:9
                 zs, zs, zs, zs, zs, ns, ...                             % col 10:15
