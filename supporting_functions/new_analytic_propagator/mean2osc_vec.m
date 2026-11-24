@@ -14,8 +14,8 @@ function oeosc = mean2osc_vec (oemean,param)
 %              (0 <= raan <= 2 pi)
 %  oemean(5) = mean argument of perigee (radians)
 %              (0 <= argument of perigee <= 2 pi)
-%  oemean(6) = mean true anomaly (radians)
-%              (0 <= true anomaly <= 2 pi)
+%  oemean(6) = mean mean anomaly (radians)
+%              (0 <= mean anomaly <= 2 pi)
 
 % output
 
@@ -28,8 +28,8 @@ function oeosc = mean2osc_vec (oemean,param)
 %             (0 <= raan <= 2 pi)
 %  oeosc(5) = osculating argument of perigee (radians)
 %             (0 <= argument of perigee <= 2 pi)
-%  oeosc(6) = osculating true anomaly (radians)
-%             (0 <= true anomaly <= 2 pi)
+%  oeosc(6) = osculating mean anomaly (radians)
+%             (0 <= mean anomaly <= 2 pi)
 
 % Orbital Mechanics with MATLAB
 

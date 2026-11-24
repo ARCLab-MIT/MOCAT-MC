@@ -18,7 +18,7 @@ if isempty(big_e)
         e_check = ecc(check_mag);
         DeltaEpw = - (big_m(check_mag) - Epw_check + e_check.*sin(Epw_check))./(-1+e_check.*cos(Epw_check));
         big_e(check_mag) = Epw_check+DeltaEpw;
-        check_mag = check_mag(DeltaEpw > 10e-14);
+        check_mag = check_mag(abs(DeltaEpw) > 1e-13);
         if isempty(check_mag) %if all elements have gone below threshold
             break
         end
